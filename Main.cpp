@@ -1,16 +1,12 @@
 #include <iostream>
 
-using namespace std;
-
 int main()
 {
-	int MyGold = 0;
-	float HP = 0.112122F;
-	char c = 72;
-
-	cout << MyGold << endl;
-	cout << HP << endl;
-	cout << c << endl;
+	int MyCash = 1000;
+	float HP = 100.0f; //실수 들어가면 뒤에 꼭 f가 붙는다, double 이면 f 안붙힌다.
+	char H = '/b';
+	
+	std::cout << "aaa" << H;
 
 	return 0;
 }
