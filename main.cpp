@@ -180,7 +180,7 @@ void InitializeBingoPlayerMap()
 		BingoPlayerMap[i] = i + 1;
 	}
 
-	srand(static_cast<unsigned int>(time(nullptr)));
+	/*srand(static_cast<unsigned int>(time(nullptr)));
 
 	//shuffle
 	for (int i = 0; i < 100; i++)
@@ -193,6 +193,7 @@ void InitializeBingoPlayerMap()
 		BingoPlayerMap[Index1] = BingoPlayerMap[Index2];
 		BingoPlayerMap[Index2] = Temp;
 	}
+	*/
 }
 
 
