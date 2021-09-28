@@ -1,45 +1,199 @@
 #include <iostream> // . 없는건 cpp표준
 #include <windows.h> //<<윈도우 헤더파일임 ,h는 헤더파일 
+#include <cstdlib>
+#include <ctime>
 
 using namespace std;
 
-void Input();
-void Process();
-void Render(); 
+//엔진회사
+char Input();
+bool Process(char Key);
+void Draw();
+void Initialize();
+void Terminate();
 
-char Key;
+//엔진회사
+void CustomInitialze();
+void CustomTerminate();
+bool CustomProcess(char Key);
+void CustomDraw();
 
-bool bGameState = true;
+//개발자
+bool ProcessBingo(char Key);
 
+
+
+void InitializeBingoPlayerMap();
+
+int BingoPlayerMap[9];
+
+//엔진회사
 int main()
 {
-	
-	while (bGameState)  
+	bool bGameState = true;
+	Initialize();
+
+	while (bGameState)
 	{
-		Input();
-		Process();
-		Render();
+		char Key = Input();
+		bGameState = Process(Key);
+		Draw();
 	}
+	Terminate();
 
 	return 0;
 }
 
-void Input()
+char Input()
 {
+	char Key;
+
 	cin >> Key;
+
+	return Key;
 }
 
-void Process()
+bool Process(char Key)
 {
 	if (Key == 'q' || Key == 'Q')
-	{ 
-		bGameState = false;
+	{
+		return false;
+	}
+
+	return CustomProcess(Key);
+}
+
+void Draw()
+{
+	cout << "그린다." << endl;
+
+	CustomDraw();
+}
+
+void Initialize()
+{
+	//초기화
+	CustomInitialze();
+
+}
+
+void Terminate()
+{
+	CustomTerminate();
+	//종료
+}
+
+//개발자
+void CustomInitialze()
+{
+	InitializeBingoPlayerMap();
+}
+
+void CustomTerminate()
+{
+	for (int i = 0; i < 9; ++i)
+	{
+		if (i % 3 == 0 && i != 0)
+		{
+			cout << "\n";
+		}
+
+		if (BingoPlayerMap[i] > 9)
+		{
+			cout << (char)BingoPlayerMap[i] << " ";
+		}
+		else
+		{
+			cout << BingoPlayerMap[i] << " ";
+		}
 	}
 }
 
-void Render()
+bool CustomProcess(char Key)
 {
-	//수업이라서 쓰는거지 상용 프로그램에 사용하면 바로 해킹당함.
-	system( "cls" ); //콘솔창 clear, 시스템 메인 함수 호출한다. command 
-	cout << "그린다." << endl;
+	return ProcessBingo(Key);
 }
+
+void CustomDraw()
+{
+}
+
+bool ProcessBingo(char Key)
+{
+	//빙고판에서 찾은 칸에 마킹한다.
+	for (int i = 0; i < 9; ++i)
+	{
+		if (BingoPlayerMap[i] == Key - 48)
+		{
+			BingoPlayerMap[i] = 'X';
+			break;
+		}
+	}
+
+	//가로 빙고인지 확인한다.
+	for (int i = 0; i <= 6; i = i + 3)
+	{
+		if (BingoPlayerMap[i + 0] == 'X' &&
+			BingoPlayerMap[i + 1] == 'X' &&
+			BingoPlayerMap[i + 2] == 'X')
+		{
+			cout << "Bingo" << endl;
+			return false;
+		}
+	}
+
+	//세로 빙고인지 확인한다.
+	for (int i = 0; i <= 2; i++)
+	{
+		if (BingoPlayerMap[i] == 'X' &&
+			BingoPlayerMap[i + 3] == 'X' &&
+			BingoPlayerMap[i + 6] == 'X')
+		{
+			cout << "Bingo" << endl;
+			return false;
+		}
+	}
+
+	//대각선 빙고인지 확인한다.
+	if (BingoPlayerMap[0] == 'X' &&
+		BingoPlayerMap[4] == 'X' &&
+		BingoPlayerMap[8] == 'X')
+	{
+		cout << "Bingo" << endl;
+		return false;
+	}
+	else if (BingoPlayerMap[2] == 'X' &&
+		BingoPlayerMap[4] == 'X' &&
+		BingoPlayerMap[6] == 'X')
+	{
+		cout << "Bingo" << endl;
+		return false;
+	}
+
+	return true;
+}
+
+void InitializeBingoPlayerMap()
+{
+	for (int i = 0; i < 9; ++i)
+	{
+		BingoPlayerMap[i] = i + 1;
+	}
+
+	srand(static_cast<unsigned int>(time(nullptr)));
+
+	//shuffle
+	for (int i = 0; i < 100; i++)
+	{
+		//rand
+		int Index1 = rand() % 9;
+		int Index2 = rand() % 9;
+
+		int Temp = BingoPlayerMap[Index1];
+		BingoPlayerMap[Index1] = BingoPlayerMap[Index2];
+		BingoPlayerMap[Index2] = Temp;
+	}
+}
+
+
+
